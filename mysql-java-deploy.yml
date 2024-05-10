@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment
+  namespace: dev
+  labels:
+    app: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:5.7
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "manounou"
+        - name: MYSQL_DATABASE
+          value: "ecomerce"
+        - name: MYSQL_USER
+          value: "stevy"
+        - name: MYSQL_PASSWORD
+          value: "manounou"
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: java-data
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: java-data
+        persistentVolumeClaim:
+          claimName: mysql-java-pvc                               
